@@ -2,7 +2,7 @@ import WordStream from './lib/word-engine/WordStream.cjs';
 import NewsStream from './lib/word-engine/NewsStream.cjs';
 import YPStream from './lib/word-engine/ypCommentsStream.cjs';
 
-async function initStreams(options) {
+async function initStreams(options = { words: [] }) {
     const { words } = options;
     const streams = [];
 
