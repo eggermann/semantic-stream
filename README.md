@@ -1,6 +1,6 @@
 # Word Stream Library
 
-This library provides a set of stream classes for generating text from various sources, including Wikipedia, news articles, and YouTube comments.
+This library provides a set of stream classes for generating text from various sources, including Wikipedia and news articles.
 
 ## Installation
 
@@ -18,7 +18,6 @@ async function main() {
         words: [
             ['medicine', 'en'],
             ['disney', 'en'],
-            [':YP', { /* YP options */ }],
             [':NEWS', { /* News options */ }]
         ]
     };
@@ -59,25 +58,14 @@ A stream that generates text from news articles.
     *   `start()`: Initializes the stream.
     *   `getNext()`: Returns the next text from the stream.
 
-#### `YPStream`
-
-A stream that generates text from YouTube comments.
-
-*   **Constructor:** `new YPStream(options)`
-    *   `options`: Configuration options for the YouTube comment stream.
-*   **Methods:**
-    *   `start()`: Initializes the stream.
-    *   `getNext()`: Returns the next text from the stream.
-
 #### `initStreams(options)`
 
 Initializes multiple streams based on the provided options.
 
 *   `options`: An object with a `words` array. Each element in the array can be:
     *   `[word, lang]` for a `WordStream`.
-    *   `[':YP', options]` for a `YPStream`.
     *   `[':NEWS', options]` for a `NewsStream`.
 
 ## License
 
-This is beerware. If you like this code, buy me a beer sometime.
+🍺 This is beerware. If you like this code, buy me a beer sometime.
