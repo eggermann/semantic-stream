@@ -1,9 +1,9 @@
-const wikiParser = require('./wiki-parse-fkt.cjs');
-const CircularLinks = require('./CircularLinks.cjs');
-const WordStream = require('./WordStream.cjs');
-const NewsAPI = require("newsapi");
-const axios = require('axios');
-require('dotenv').config({path:__dirname+'/.env'});
+import wikiParser from './wiki-parse-fkt.js';
+import CircularLinks from './CircularLinks.js';
+import WordStream from './WordStream.js';
+import NewsAPI from "newsapi";
+import axios from 'axios';
+import 'dotenv/config';
 
 
 const newsApiKey = process.env.NEWS_API_KEY
@@ -132,6 +132,9 @@ const testNewsStream = async () => {
     logNextLinkPeriodically();
 };
 
-module.exports =NewsStream;
+export default NewsStream;
 
 //testNewsStream();
+{
+  "type": "module"
+}

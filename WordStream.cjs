@@ -1,7 +1,7 @@
-const wiki = require('wikijs').default;
-const wikiParser = require('./wiki-parse-fkt.cjs');
-const cheerio = require('cheerio');
-const CircularLinks = require('./CircularLinks.cjs');
+import wiki from 'wikijs';
+import wikiParser from './wiki-parse-fkt.js';
+import cheerio from 'cheerio';
+import CircularLinks from './CircularLinks.js';
 
 class WordStream {
     constructor(word = 'maus', lang = 'en') {
@@ -244,4 +244,4 @@ class WordStream {
 }
 
 
-module.exports = WordStream;
+export default WordStream;

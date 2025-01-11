@@ -1,9 +1,9 @@
-const wikiParser = require('./wiki-parse-fkt.cjs');
-const CircularLinks = require('./CircularLinks.cjs');
-const WordStream = require('./WordStream.cjs');
+import wikiParser from './wiki-parse-fkt.js';
+import CircularLinks from './CircularLinks.js';
+import WordStream from './WordStream.js';
 const _ = {};
 _bufferSize = 6;//comments
-const {io} = require("socket.io-client");
+import {io} from "socket.io-client";
 
 class commentStream extends WordStream {
     constructor(options) {
@@ -170,4 +170,4 @@ commentLength: 134
 }
 
 
-module.exports = commentStream;
+export default commentStream;

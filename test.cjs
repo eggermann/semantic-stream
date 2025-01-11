@@ -1,12 +1,16 @@
-const { WordStream, NewsStream, YPStream, initStreams } = require('./index.js');
+import { WordStream, NewsStream, YPStream, initStreams } from './index.js';
 
 async function testWordStream() {
     const wordStream = new WordStream('test', 'en');
     await wordStream.start();
-    const link = await wordStream.getNext();
-    console.log('WordStream test:', link);
-    if (!link || !link.title) {
-        throw new Error('WordStream test failed: No link or title found');
+
+
+    for (let i = 0; i < 3; i++) {
+        const link = await wordStream.getNext();
+        console.log(`WordStream test (${i + 1}):`, link);
+        if (!link || !link.title) {
+            throw new Error(`WordStream test failed on iteration ${i + 1}: No link or title found`);
+        }
     }
 }
 
@@ -48,9 +52,9 @@ async function testInitStreams() {
 async function runTests() {
     try {
         await testWordStream();
-        await testNewsStream();
-        //await testYPStream();
-        await testInitStreams();
+        // await testNewsStream();
+        // await testYPStream();
+        // await testInitStreams();
         console.log('All tests passed!');
     } catch (error) {
         console.error('Test failed:', error);

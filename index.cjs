@@ -1,7 +1,7 @@
-const WordStream = require("./WordStream.cjs");
-const NewsStream = require("./NewsStream.cjs");
-const YPStream = require("./ypCommentsStream.cjs");
-const onExit = require('./onExit.cjs');
+import WordStream from "./WordStream.js";
+import NewsStream from "./NewsStream.js";
+import YPStream from "./ypCommentsStream.js";
+import onExit from './onExit.js';
 
 async function init(words = [['Maus', 'de']]) {
 
@@ -47,4 +47,4 @@ async function init(words = [['Maus', 'de']]) {
     });
 }
 
-module.exports = {WordStream, NewsStream, YPStream, init};
+export {WordStream, NewsStream, YPStream, init};

@@ -1,6 +1,10 @@
 
-const util = require('util');
-const path = require('path');
+import { fileURLToPath } from 'url';
+import path from 'path';
+import fs from 'fs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const CircularLinks = class {
     constructor(startWord) {
@@ -16,7 +20,7 @@ const CircularLinks = class {
         const p = path.join(dir, this.startWord + '.json')
 
         try {
-            const data = require(p);
+            const data = JSON.parse(fs.readFileSync(p, 'utf-8'));
             //   console.log(data);
             this.links = data.links;
             this.usedLinks = data.usedLinks;
@@ -135,4 +139,4 @@ let highest=0,index=0,index2=0;
     }
 }
 
-module.exports = CircularLinks;
+export default CircularLinks;

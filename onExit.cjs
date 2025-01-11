@@ -1,5 +1,9 @@
-const path = require('path');
-const fs = require('fs');
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 const folderName = 'XXX_crashed-file';
@@ -37,7 +41,7 @@ const _ = {
         }
     }
 }
-module.exports = (streams) => {
+export default (streams) => {
     _.streams = streams;
     process.stdin.resume();//so the program will not close instantly
 

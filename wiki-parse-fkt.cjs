@@ -50,4 +50,4 @@ const _ = {
 }
 
 
-module.exports = _;
+export default _;
