@@ -80,4 +80,4 @@ Initializes multiple streams based on the provided options.
 
 ## License
 
-[Your License]
+This is beerware. If you like this code, buy me a beer sometime.
