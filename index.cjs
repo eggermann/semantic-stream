@@ -3,7 +3,7 @@ const NewsStream = require("./NewsStream.cjs");
 const YPStream = require("./ypCommentsStream.cjs");
 const onExit = require('./onExit.cjs');
 
-async function initStreams(words = [['Maus', 'de']]) {
+async function init(words = [['Maus', 'de']]) {
 
     const wordStreams = words.map(async wordAndLang => {
         let wordStream = null;
@@ -47,4 +47,4 @@ async function initStreams(words = [['Maus', 'de']]) {
     });
 }
 
-module.exports = {WordStream, NewsStream, YPStream, initStreams};
+module.exports = {WordStream, NewsStream, YPStream, init};

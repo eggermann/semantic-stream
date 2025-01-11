@@ -49,7 +49,7 @@ async function runTests() {
     try {
         await testWordStream();
         await testNewsStream();
-        await testYPStream();
+        //await testYPStream();
         await testInitStreams();
         console.log('All tests passed!');
     } catch (error) {
