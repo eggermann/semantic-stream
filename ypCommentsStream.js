@@ -2,7 +2,7 @@ import wikiParser from './wiki-parse-fkt.js';
 import CircularLinks from './CircularLinks.js';
 import WordStream from './WordStream.js';
 const _ = {};
-_bufferSize = 6;//comments
+const _bufferSize = 6;//comments
 import {io} from "socket.io-client";
 
 class commentStream extends WordStream {

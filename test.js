@@ -1,15 +1,18 @@
-import { WordStream, NewsStream, YPStream, initStreams } from './index.cjs';
+import pkg from './index.js';
+
+const { WordStream, NewsStream, YPStream, init } = pkg;
 
 async function testWordStream() {
-    const wordStream = new WordStream('test', 'en');
+
+    const wordStream = new WordStream('Robotics', 'en');
     await wordStream.start();
 
 
-    for (let i = 0; i < 3; i++) {
-        const link = await wordStream.getNext();
-        console.log(`WordStream test (${i + 1}):`, link);
-        if (!link || !link.title) {
-            throw new Error(`WordStream test failed on iteration ${i + 1}: No link or title found`);
+    for (let i = 0; i < 10; i++) {
+        const item = await wordStream.getNext();
+        console.log(`WordStream test (${i + 1}):`, item.urlLink);
+        if (!item || !item.title) {
+            throw new Error(`WordStream test failed on iteration ${i + 1}: No item or title found`);
         }
     }
 }

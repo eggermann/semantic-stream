@@ -1,12 +1,16 @@
 import wikiParser from './wiki-parse-fkt.js';
 import CircularLinks from './CircularLinks.js';
 import WordStream from './WordStream.js';
+
+import 'dotenv/config';
+const newsApiKey = process.env.NEWS_API_KEY
+
 import NewsAPI from "newsapi";
 import axios from 'axios';
-import 'dotenv/config';
 
 
-const newsApiKey = process.env.NEWS_API_KEY
+
+
 
 const newsapi = new NewsAPI(newsApiKey);
 const _={};
@@ -135,6 +139,3 @@ const testNewsStream = async () => {
 export default NewsStream;
 
 //testNewsStream();
-{
-  "type": "module"
-}

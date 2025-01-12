@@ -1,5 +1,4 @@
-
-import { fileURLToPath } from 'url';
+import {fileURLToPath} from 'url';
 import path from 'path';
 import fs from 'fs';
 
@@ -7,7 +6,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const CircularLinks = class {
-    constructor(startWord) {
+    constructor(startWord,options={
+        inhibitory:true,
+
+    }) {
         this.links = {};
         this.usedLinks = {};
         this.startWord = startWord;
@@ -90,19 +92,16 @@ const CircularLinks = class {
     }
 
     getNext() {
-let highest=0,index=0,index2=0;
-      for (const property in this.links) {
+        let highest = 0, elementKey='';
+        for (const key in this.links) {
 
-        const hCnt=this.links[property].cnt;
+            const hCnt = this.links[key].cnt;
 
-        if(hCnt>highest ){
-          index2=index;
-          highest=hCnt;
+            if (hCnt > highest) {
+                elementKey = key;
+                highest = hCnt;
+            }
         }
-  index++;
-      }
-
-        const elementKey = Object.keys(this.links)[index2]
         // console.log('next circular link call ++>'/*, JSON.stringify(nextEl, null, 2)*/);
 
         if (!elementKey) {
@@ -115,13 +114,14 @@ let highest=0,index=0,index2=0;
 
         if (nextEl.cnt > 1) {
             nextEl.cnt--;
+           //keeps the link in "game
             this.links[elementKey] = nextEl;//repeat until 0 /inhibitoric
         } else {
             this.addUsedLink(nextEl);
         }
         //this.addUsedLink(nextEl);
 
-
+console.log(nextEl.cnt)
         //  if(nextEl.cnt)
 
         // console.log('- this.links[firstElKey]-------', this.links[firstElKey])

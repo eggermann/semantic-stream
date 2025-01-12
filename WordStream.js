@@ -1,6 +1,6 @@
 import wiki from 'wikijs';
 import wikiParser from './wiki-parse-fkt.js';
-import cheerio from 'cheerio';
+import * as cheerio from 'cheerio';
 import CircularLinks from './CircularLinks.js';
 
 class WordStream {
@@ -126,7 +126,7 @@ class WordStream {
 
     async getArticle(title) {
         //   title = encodeURI(title);
-        console.log('getArticle title: ', title)
+        console.log('----> getArticle title: ', title)
 
         return wiki(this.apiData)
             .page(title)

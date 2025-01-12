@@ -3,7 +3,7 @@ import NewsStream from "./NewsStream.js";
 import YPStream from "./ypCommentsStream.js";
 import onExit from './onExit.js';
 
-async function init(words = [['Maus', 'de']]) {
+async function initStreams(words = [['Maus', 'de']],options={}) {
 
     const wordStreams = words.map(async wordAndLang => {
         let wordStream = null;
@@ -47,4 +47,4 @@ async function init(words = [['Maus', 'de']]) {
     });
 }
 
-export {WordStream, NewsStream, YPStream, init};
+export default {WordStream, NewsStream, YPStream, initStreams};
