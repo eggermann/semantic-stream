@@ -1,17 +1,21 @@
-# Word Stream Library
+# semantic-stream
 
-This library provides a set of stream classes for generating text from various sources, including Wikipedia and news articles.
+`semantic-stream` is a Node.js library that provides a set of stream classes for generating text from various sources, including Wikipedia articles and news feeds.
 
 ## Installation
 
+Install the package using npm:
+
 ```bash
-npm install your-package-name
+npm install semantic-stream
 ```
 
 ## Usage
 
+Here's an example of how to use the library:
+
 ```javascript
-import { WordStream, NewsStream, YPStream, initStreams } from 'your-package-name';
+import { WordStream, NewsStream, initStreams } from 'semantic-stream';
 
 async function main() {
     const options = {
@@ -41,30 +45,30 @@ main();
 
 A stream that generates text from Wikipedia articles.
 
-*   **Constructor:** `new WordStream(word, lang)`
-    *   `word`: The starting word for the stream.
-    *   `lang`: The language of the Wikipedia articles.
-*   **Methods:**
-    *   `start()`: Initializes the stream.
-    *   `getNext()`: Returns the next text from the stream.
+- **Constructor:** `new WordStream(word, lang)`
+  - `word`: The starting word for the stream.
+  - `lang`: The language of the Wikipedia articles.
+- **Methods:**
+  - `start()`: Initializes the stream.
+  - `getNext()`: Returns the next text from the stream.
 
 #### `NewsStream`
 
 A stream that generates text from news articles.
 
-*   **Constructor:** `new NewsStream(options)`
-    *   `options`: Configuration options for the news stream.
-*   **Methods:**
-    *   `start()`: Initializes the stream.
-    *   `getNext()`: Returns the next text from the stream.
+- **Constructor:** `new NewsStream(options)`
+  - `options`: Configuration options for the news stream.
+- **Methods:**
+  - `start()`: Initializes the stream.
+  - `getNext()`: Returns the next text from the stream.
 
 #### `initStreams(options)`
 
 Initializes multiple streams based on the provided options.
 
-*   `options`: An object with a `words` array. Each element in the array can be:
-    *   `[word, lang]` for a `WordStream`.
-    *   `[':NEWS', options]` for a `NewsStream`.
+- `options`: An object with a `words` array. Each element in the array can be:
+  - `[word, lang]` for a `WordStream`.
+  - `[':NEWS', options]` for a `NewsStream`.
 
 ## License
 
