@@ -66,9 +66,14 @@ A stream that generates text from news articles.
 
 Initializes multiple streams based on the provided options.
 
-- `options`: An object with a `words` array. Each element in the array can be:
-  - `[word, lang]` for a `WordStream`.
-  - `[':NEWS', options]` for a `NewsStream`.
+- `options`: An object with the following properties:
+  - `words`: An array where each element can be:
+    - `[word, lang]` for a `WordStream`
+    - `[':NEWS', options]` for a `NewsStream`
+  - `circularLinkType`: (optional) Controls how links are processed:
+    - Default: Prioritizes links by count, reducing count gradually
+    - `'getNextClassic'`: Returns links in sequential order
+    - `'getNextUnique'`: Returns only unique links, skipping duplicates
 
 ## License
 
