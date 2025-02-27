@@ -1,4 +1,4 @@
-import {fileURLToPath} from 'url';
+import { fileURLToPath } from 'url';
 import path from 'path';
 import fs from 'fs';
 
@@ -6,13 +6,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const CircularLinks = class {
-    constructor(startWord,options={
-        inhibitory:true,
-
-    }) {
+    constructor(startWord, options) {
         this.links = {};
         this.usedLinks = {};
         this.startWord = startWord;
+        this.options = options;
         //check for shutdowned
 
         this.model = {}
@@ -35,11 +33,13 @@ const CircularLinks = class {
         // console.log('ADD USED LINK ',el)
 
         const title = el.title;
-        console.log('add used link: ', title)
+       
 
         this.usedLinks[title] ?
             this.usedLinks[title].cnt++ :
-            this.usedLinks[title] = {cnt: 1};
+            this.usedLinks[title] = { cnt: 1 };
+
+           // console.log('add used link: ',         this.usedLinks[title] )
     }
 
     addLinks(freshLinks) {
@@ -92,7 +92,17 @@ const CircularLinks = class {
     }
 
     getNext() {
-        let highest = 0, elementKey='';
+
+        if (this.options.circularLinkType === 'getNextUnique') {
+            return this.getNextUnique();
+        }
+
+        if (this.options.circularLinkType === 'getNextClassic') {
+            return this.getNextClassic();
+        }
+
+
+        let highest = 0, elementKey = '';
         for (const key in this.links) {
 
             const hCnt = this.links[key].cnt;
@@ -113,15 +123,15 @@ const CircularLinks = class {
         delete this.links[elementKey];
 
         if (nextEl.cnt > 1) {
-            nextEl.cnt--;
-           //keeps the link in "game
-            this.links[elementKey] = nextEl;//repeat until 0 /inhibitoric
+            nextEl.cnt/=10;
+            //keeps the link in "game
+         this.links[elementKey] = nextEl;//repeat until 0 /inhibitoric
         } else {
             this.addUsedLink(nextEl);
         }
         //this.addUsedLink(nextEl);
 
-console.log(nextEl.cnt)
+        console.log(nextEl.cnt)
         //  if(nextEl.cnt)
 
         // console.log('- this.links[firstElKey]-------', this.links[firstElKey])
@@ -135,7 +145,29 @@ console.log(nextEl.cnt)
         console.log('next circular link: ', nextEl.title)
         delete this.links[firstElKey];
 
-        return nextEl.link.title;
+        return nextEl;
+    }
+
+
+    getNextUnique() {
+        const firstElKey = Object.keys(this.links)[0]
+        const nextEl = this.links[firstElKey];
+        console.log('--->',Object.keys(this.links).length,nextEl)
+      
+        delete this.links[firstElKey];
+        if (this.usedLinks[nextEl.title]) {
+
+            return null;
+          
+        }
+
+  
+        console.log('next circular link: ', nextEl.title)
+       
+        this.addUsedLink(nextEl);
+
+
+        return nextEl;
     }
 }
 

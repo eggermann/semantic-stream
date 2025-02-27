@@ -4,11 +4,11 @@ const { WordStream, NewsStream, YPStream, init } = pkg;
 
 async function testWordStream() {
 
-    const wordStream = new WordStream('Robotics', 'en');
+    const wordStream = new WordStream('Robotics', 'en',{circularLinkTypeXX:'getNextUnique'});
     await wordStream.start();
 
 
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 10000; i++) {
         const item = await wordStream.getNext();
         console.log(`WordStream test (${i + 1}):`, item.urlLink);
         if (!item || !item.title) {

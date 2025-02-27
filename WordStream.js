@@ -4,9 +4,11 @@ import * as cheerio from 'cheerio';
 import CircularLinks from './CircularLinks.js';
 
 class WordStream {
-    constructor(word = 'maus', lang = 'en') {
+    constructor(word = 'maus', lang = 'en', options = { XXcircularLinkType: 'getNextUnique' }) {
         this.startWord = word;
-        this.circularLinks = new CircularLinks(word);
+
+
+        this.circularLinks = new CircularLinks(word, options);
 
         this.lang = lang;
         this.apiData = {
@@ -36,7 +38,10 @@ class WordStream {
                 }
 
                 this.circularLinks.addLinks(results);
-                const title = await this.circularLinks.getNext().title;
+
+
+                const title = this.circularLinks.getNext().title;
+
                 console.log('----->   ', title)
 
                 return title;
@@ -115,10 +120,11 @@ class WordStream {
         });
 
         this.circularLinks.addLinks(wikijsResult.links)
-//        console.log(' -->this.circularLinks.links ',     this.circularLinks.links)
+        //        console.log(' -->this.circularLinks.links ',     this.circularLinks.links)
     }
 
-    async start() {
+    async start(type) {
+
 
         await this.getArticle(this.startWord);
 
@@ -166,7 +172,7 @@ class WordStream {
                                     urlLink,
                                     title,
                                     text,
-                                    sentences: {prev: [], next: []}
+                                    sentences: { prev: [], next: [] }
                                 };
 
                             obj.linkOccurenceArray.push(JSON.parse(JSON.stringify(wellSortedLinks[title])));
@@ -196,50 +202,45 @@ class WordStream {
 
 
 
-    getNext() {
+    async getNext() {
 
-
+        console.log('#########----######### ', Object.keys(this.circularLinks.links).length)
         if (Object.keys(this.circularLinks.links).length <= 20) {//>= erste ist ursprungslink
 
 
-            //not async
-            const it = async () => {
+            const nextLinkTitle = Object.keys(this.circularLinks.usedLinks)[1];//   const firstElKey = Object.keys(this.links)[0]//this.circularLinks.getNext().title
+
+            console.log('#########----...... ', nextLinkTitle)
+            const nextLink = this.circularLinks.usedLinks[nextLinkTitle];
+
+            if (nextLink) {
+                delete this.circularLinks.usedLinks[nextLinkTitle];
+                console.log('###### nextLinkTitle', nextLinkTitle);
+                await this.getArticle(nextLinkTitle);
 
 
+                /*
+                console.log('###### not tested; :load nextLink from used Link ----->', nextLink);
+                nextLink.usedCnt = nextLink.usedCnt ? nextLink.usedCnt++ : 1;
+                const nl = JSON.parse(JSON.stringify(nextLink));
 
-                const nextLinkTitle = Object.keys(this.circularLinks.usedLinks)[1];//   const firstElKey = Object.keys(this.links)[0]//this.circularLinks.getNext().title
+                delete this.circularLinks.usedLinks[nextLinkTitle];
 
-                console.log('#########----...... ', nextLinkTitle)
-                const nextLink = this.circularLinks.usedLinks[nextLinkTitle];
 
-                if (nextLink) {
-                    delete this.circularLinks.usedLinks[nextLinkTitle];
-                    console.log('###### nextLinkTitle', nextLinkTitle);
+                if (nextLink.usedCnt > 4) {
+                    console.log('###### not tested; :load nextLink from used Link ----->', nl);
                     await this.getArticle(nextLinkTitle);
-
-
-                    /*
-                    console.log('###### not tested; :load nextLink from used Link ----->', nextLink);
-                    nextLink.usedCnt = nextLink.usedCnt ? nextLink.usedCnt++ : 1;
-                    const nl = JSON.parse(JSON.stringify(nextLink));
-
-                    delete this.circularLinks.usedLinks[nextLinkTitle];
-
-
-                    if (nextLink.usedCnt > 4) {
-                        console.log('###### not tested; :load nextLink from used Link ----->', nl);
-                        await this.getArticle(nextLinkTitle);
-                    } else {
-                        this.circularLinks.usedLinks[nextLinkTitle] = nl;
-                        await it();
-                    }*/
-                }
+                } else {
+                    this.circularLinks.usedLinks[nextLinkTitle] = nl;
+                    await it();
+                }*/
             }
-            it();
         }
-
-
-        return this.circularLinks.getNext();
+        const next = this.circularLinks.getNext();
+        if (!next) {
+            return await this.getNext();
+        }
+        return next;
     }
 }
 
