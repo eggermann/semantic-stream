@@ -1,7 +1,7 @@
 {
   "name": "semantic-stream",
   "type": "module",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A library of stream classes for semantic text processing, including sources like Wikipedia and news articles.",
   "main": "index.js",
   "exports": {
