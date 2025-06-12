@@ -66,8 +66,7 @@ class WordStream {
 
 
         if (wikiParser.hasMultipleMeaning(wikijsResult)) {
-            console.log('MULTO')
-            process.exit()
+
             this.circularLinks.addLinks(Object.keys(wikijsResult.links));
             return this.getArticle(this.circularLinks.getNext().title);
         }
@@ -119,6 +118,8 @@ class WordStream {
              console.log(' ')*/
         });
 
+
+        
         this.circularLinks.addLinks(wikijsResult.links)
         //        console.log(' -->this.circularLinks.links ',     this.circularLinks.links)
     }
@@ -204,18 +205,18 @@ class WordStream {
 
     async getNext() {
 
-        console.log('#########----######### ', Object.keys(this.circularLinks.links).length)
+      //  console.log('#########----######### ', Object.keys(this.circularLinks.links).length)
         if (Object.keys(this.circularLinks.links).length <= 20) {//>= erste ist ursprungslink
 
 
             const nextLinkTitle = Object.keys(this.circularLinks.usedLinks)[1];//   const firstElKey = Object.keys(this.links)[0]//this.circularLinks.getNext().title
 
-            console.log('#########----...... ', nextLinkTitle)
+            //console.log('#########----...... ', nextLinkTitle)
             const nextLink = this.circularLinks.usedLinks[nextLinkTitle];
 
             if (nextLink) {
                 delete this.circularLinks.usedLinks[nextLinkTitle];
-                console.log('###### nextLinkTitle', nextLinkTitle);
+              //  console.log('###### nextLinkTitle', nextLinkTitle);
                 await this.getArticle(nextLinkTitle);
 
 

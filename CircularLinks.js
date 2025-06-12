@@ -33,29 +33,41 @@ const CircularLinks = class {
         // console.log('ADD USED LINK ',el)
 
         const title = el.title;
-       
+
 
         this.usedLinks[title] ?
             this.usedLinks[title].cnt++ :
             this.usedLinks[title] = { cnt: 1 };
 
-           // console.log('add used link: ',         this.usedLinks[title] )
+        // console.log('add used link: ',         this.usedLinks[title] )
     }
 
     addLinks(freshLinks) {
 
-        if (Array.isArray(freshLinks)) {
 
-            // from suggestion
+        if (Array.isArray(freshLinks)) {
+            // from suggestion or multiplmeaning
+            // console.log('freshLink *** -->', freshLinks);
+
+
+
             freshLinks.forEach((link) => {
-                console.log('freshLink *** -->', link)
+
+                // Create a Wikipedia-style URL slug using encodeURIComponent
+                const urlLink = encodeURIComponent(link.replace(/ /g, '_'));
+
                 this.links[link] ?
                     this.links[link].cnt++ :
-                    this.links[link] = {
+                    (this.links[link] = {
+                        urlLink,
                         cnt: 1,
                         title: link
-                    };
+                    });
+
             });
+
+
+           // console.log(this.links);
 
         } else {
 
@@ -123,15 +135,15 @@ const CircularLinks = class {
         delete this.links[elementKey];
 
         if (nextEl.cnt > 1) {
-            nextEl.cnt/=10;
+            nextEl.cnt /= 10;
             //keeps the link in "game
-         this.links[elementKey] = nextEl;//repeat until 0 /inhibitoric
+            this.links[elementKey] = nextEl;//repeat until 0 /inhibitoric
         } else {
             this.addUsedLink(nextEl);
         }
         //this.addUsedLink(nextEl);
 
-        console.log(nextEl.cnt)
+        // console.log(nextEl.cnt)
         //  if(nextEl.cnt)
 
         // console.log('- this.links[firstElKey]-------', this.links[firstElKey])
@@ -152,18 +164,18 @@ const CircularLinks = class {
     getNextUnique() {
         const firstElKey = Object.keys(this.links)[0]
         const nextEl = this.links[firstElKey];
-        console.log('--->',Object.keys(this.links).length,nextEl)
-      
+        console.log('--->', Object.keys(this.links).length, nextEl)
+
         delete this.links[firstElKey];
         if (this.usedLinks[nextEl.title]) {
 
             return null;
-          
+
         }
 
-  
+
         console.log('next circular link: ', nextEl.title)
-       
+
         this.addUsedLink(nextEl);
 
 
