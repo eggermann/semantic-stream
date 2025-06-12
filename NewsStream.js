@@ -3,17 +3,11 @@ import CircularLinks from './CircularLinks.js';
 import WordStream from './WordStream.js';
 
 import 'dotenv/config';
-const newsApiKey = process.env.NEWS_API_KEY
+
 
 import NewsAPI from "newsapi";
 import axios from 'axios';
 
-
-
-
-
-const newsapi = new NewsAPI(newsApiKey);
-const _={};
 class NewsStream extends WordStream {
     constructor(options) {
         super();
@@ -21,6 +15,13 @@ class NewsStream extends WordStream {
         this.pageCnt = 0;
         this.circularLinks = new CircularLinks(':News');
         this.isNews = true;
+
+        const newsApiKey = process.env.NEWS_API_KEY;
+
+        if (!newsApiKey) {
+            throw new Error('Missing NEWS_API_KEY in environment variables');
+        }
+        this.newsapi = new NewsAPI(newsApiKey);
     }
 
     async start() {
@@ -31,6 +32,7 @@ class NewsStream extends WordStream {
         for (const newsKey of Object.keys(articles)) {
             const news = articles[newsKey];
             news.description = news.description || '';
+            news.content = news.content || '';
 
             // Get previous and next sentences
             const prevDeltaString = wikiParser.shortPhrase(news.description, -1);
@@ -56,81 +58,78 @@ class NewsStream extends WordStream {
 
     async getNews() {
         const newsSources = await this.getSources();
-        //  console.log('------>>>* getNews from sources*',sources);
 
         try {
-
-            const response = await newsapi.v2.everything({
-                sources: newsSources,//'bbc-news,the-verge',//https://newsapi.org/docs/endpoints/sources
-                //   domains: 'bbc.co.uk,techcrunch.com',//
+            const response = await this.newsapi.v2.everything({
+                sources: newsSources,
                 language: 'en',
-                // sortBy: 'popularity',//'relevancy',//default publishedAt
-                pageSize: '100',
-                page: 1//(++ this.pageCnt % 2)+1
-            }, {noCache: true});
+                pageSize: 100,
+                page: 1
+            }, { noCache: true });
 
             const wellSortedLinks = {};
 
             response.articles.forEach(news => {
-                const {title, description, content} = news;
+                const { title, description, content } = news;
 
                 if (!wellSortedLinks[title]) {
                     wellSortedLinks[title] = {
                         cnt: 1,
                         title, description, content,
-                        sentences: {prev: [], next: []}
+                        sentences: { prev: [], next: [] }
                     };
                 } else {
                     wellSortedLinks[title].cnt++;
                 }
             });
 
-           // console.log(wellSortedLinks,Object.keys(wellSortedLinks).length)
+            this.wellSortedLinks = wellSortedLinks;
 
-            _.wellSortedLinks=wellSortedLinks
-
-             await this.check(wellSortedLinks);
+            await this.check(wellSortedLinks);
 
         } catch (error) {
             console.error('Error fetching news:', error);
-            return await this.check(_.wellSortedLinks);
+            if (this.wellSortedLinks) {
+                await this.check(this.wellSortedLinks);
+            }
         }
     }
 
     async getNext() {
-        if (Object.keys(this.circularLinks.links).length <= 2) {
-
-
-            const nextLinkTitle = Object.keys(this.circularLinks.usedLinks)[1];
+        const usedLinksKeys = Object.keys(this.circularLinks.usedLinks);
+        if (usedLinksKeys.length > 1) {
+            const nextLinkTitle = usedLinksKeys[1];
             const nextLink = this.circularLinks.usedLinks[nextLinkTitle];
 
             if (nextLink) {
-                //delete the first in brain to keep actuality
+                // Delete the first in brain to keep actuality
                 delete this.circularLinks.usedLinks[nextLinkTitle];
-
                 await this.getNews();
-
             }
         }
-
         return this.circularLinks.getNext();
     }
 }
 
 // Test Function to verify the NewsStream class
 const testNewsStream = async () => {
-    const options = {}; // Customize your options if needed
+    const options = {};
     const newsStream = new NewsStream(options);
 
     console.log('Starting NewsStream...');
     await newsStream.start();
 
+    let count = 0;
+    const maxCount = 5; // Limit for demonstration
+
     async function logNextLinkPeriodically() {
-        while (true) {
+        while (count < maxCount) {
             const nextLink = await newsStream.getNext();
-           console.log('Next link:', nextLink,nextLink.title);
-            await new Promise(resolve => setTimeout(resolve, 3200)); // sleep for 1200ms
+            console.log('Next link:', nextLink, nextLink?.title);
+            await new Promise(resolve => setTimeout(resolve, 3200));
+            count++;
         }
+        console.log('Test finished.');
     }
 
     logNextLinkPeriodically();
@@ -138,4 +137,5 @@ const testNewsStream = async () => {
 
 export default NewsStream;
 
+// Uncomment to run test
 //testNewsStream();
