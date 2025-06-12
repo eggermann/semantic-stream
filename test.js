@@ -4,11 +4,14 @@ const { WordStream, NewsStream, YPStream, init } = pkg;
 
 async function testWordStream() {
 
-    const wordStream = new WordStream('Robotics', 'en',{circularLinkTypeXX:'getNextUnique'});
+    //  const wordStream = new WordStream('Robotics', 'en',{circularLinkTypeXX:'getNextUnique'});
+
+  const wordStream = new WordStream('Davidstern', 'de');
+
     await wordStream.start();
 
 
-    for (let i = 0; i < 10000; i++) {
+    for (let i = 0; i < 1000; i++) {
         const item = await wordStream.getNext();
         console.log(`WordStream test (${i + 1}):`, item.urlLink);
         if (!item || !item.title) {
@@ -55,9 +58,9 @@ async function testInitStreams() {
 async function runTests() {
     try {
         await testWordStream();
-       // await testNewsStream();
-       // await testYPStream();
-       // await testInitStreams();
+        // await testNewsStream();
+        // await testYPStream();
+        // await testInitStreams();
         console.log('All tests passed!');
     } catch (error) {
         console.error('Test failed:', error);
